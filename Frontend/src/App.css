@@ -1,0 +1,39 @@
+.page-mid-section {
+  min-height: 89.7vh;
+  margin: auto;
+  width: 45%;
+}
+.page-mid-section2 {
+  min-height: 89.7vh;
+}
+
+.main-button-css {
+  padding: 7px 50px;
+}
+.mid-padding {
+  padding-top: 70px;
+}
+
+.login-form-modal {
+  width: 80%;
+  margin: auto;
+  min-height: 89.7vh;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+@media screen and (max-aspect-ratio: 4/3) {
+  .login-form-modal {
+    width: 85%;
+    min-height: 92vh;
+  }
+  .page-mid-section {
+    width: 85%;
+    min-height: 92vh;
+  }
+  .page-mid-section2 {
+    min-height: 92vh;
+  }
+}
