@@ -10,7 +10,7 @@ async function ApiCall(url, httpMethod, data) {
 
       return response;
     } else if (httpMethod === "POST") {
-      //   console.log("Data Being Sent : ", data);
+      
 
       const response = await axios.post(url, data);
 
