@@ -52,6 +52,7 @@ export default function ProfilePage() {
     };
     getuserdetails();
   }, []);
+
   async function logout() {
     try {
       const res = await axios.post(`/users/logout`, {});
