@@ -1,0 +1,12 @@
+.profile-show2 {
+    display: none !important;
+  }
+  
+  @media screen and (max-aspect-ratio: 4/3) {
+    .profile-show2 {
+      display: block !important;
+    }
+    .profile-show1 {
+      display: none !important;
+    }
+  }
