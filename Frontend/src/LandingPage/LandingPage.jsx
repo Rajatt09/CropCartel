@@ -10,7 +10,7 @@ function LandingPage() {
   useEffect(() => {
     async function redirectingfunction() {
       try {
-        const res = await axios.post(/users/redirecting, {});
+        const res = await axios.post("/users/redirecting", {});
         console.log(res);
         if (res.status == 200) {
           navigate("/user/dashboard");
