@@ -212,8 +212,10 @@ const redirectingUser = async function (req, res) {
 const getDetails = async function (req, res) {
   try {
     const loggedInUser = await User.findById(req.user._id).select(
-      "-password -refreshToken -_id -createdAt  -updatedAt -__v"
+      "-password -refreshToken -createdAt  -updatedAt -__v"
     );
+
+    console.log("get details is activated");
 
     return res.status(200).json(new ApiResponse(200, loggedInUser));
   } catch (e) {

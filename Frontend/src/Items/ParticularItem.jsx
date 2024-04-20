@@ -17,12 +17,20 @@ import { useParams } from "react-router-dom";
 import ApiCall from "../../utils/ApiCall";
 import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
+import io from "socket.io-client"
 
 function ParticularItem() {
+
+  const socket=io.connect("http://localhost:8001")
+
+
   const id = useParams().id;
 
-  const [item, setItem] = useState([]);
-  const [data, setData] = useState("");
+  const [item, setItem] = useState({});
+  const [data, setData] = useState({});
+  const [userProfile, setUserProfile] = useState({
+    price : "",
+  });
   const [errors, setErrors] = useState({
     priceError: "",
   });
@@ -30,6 +38,13 @@ function ParticularItem() {
     const getitemdetails = async () => {
       try {
         const response = await ApiCall(`/users/getItems/${id}`, "GET", null);
+        const response2 = await ApiCall("/users/getDetails", "GET", null);
+        const temp2 = response2.data.data || {};
+
+        setUserProfile(temp2);
+
+        // console.log("temp", temp);
+        console.log("userData is here :", userProfile); 
         const temp = response.data.data || {};
 
         setItem(temp);
@@ -53,16 +68,16 @@ function ParticularItem() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(data);
+    console.log("bid price is : ", data);
 
     setErrors({
       priceError: "",
     });
 
     if (
-      data.price === "" ||
-      data.price < item.basePrice
-      //   || data.price < currentPrice
+      data === "" ||
+      Number(data) <= Number(item.basePrice)
+        
     ) {
       setErrors((prevData) => ({
         ...prevData,
@@ -71,22 +86,37 @@ function ParticularItem() {
       return;
     }
 
-    const bidding = async () => {
-      try {
-        const response = await ApiCall("", "POST", {});
-        const temp = response.data.data || {};
+    // const bidding = async () => {
+    //   try {
+    //     const response = await ApiCall("", "POST", {});
+    //     const temp = response.data.data || {};
 
-        setData(temp);
+    //     setData(temp);
 
-        console.log("temp", temp);
-        console.log("bidData", data);
-      } catch (error) {
-        console.error("Error while bidding : ", error);
+    //     console.log("temp", temp);
+    //     console.log("bidData", data);
+    //   } catch (error) {
+    //     console.error("Error while bidding : ", error);
+    //   }
+    // };
+    // bidding();
+      
+      const new_bid={
+        _id_user:userProfile._id,
+        _id_item:item._id,
+        currentPrice:Number(data.price)
       }
+      console.log("Inside Frontend:",new_bid)
+      socket.emit("send_message",new_bid);
     };
-    bidding();
-  };
 
+    useEffect(() => {
+    
+      socket.on("receive_message", (new_item) => {
+        setItem(new_item);
+      });
+    }, [socket]);
+    
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString(); // You can customize the date format as needed
