@@ -1,0 +1,29 @@
+.login-form {
+    width: 45%;
+    margin: auto;
+    min-height: 89.7vh;
+    display: flex;
+    flex-direction: column;
+  
+    justify-content: center;
+  }
+  .login-break {
+    display: none;
+  }
+  
+  @media screen and (max-aspect-ratio: 4/3) {
+    .login-form {
+      width: 85%;
+      min-height: 92vh;
+    }
+    .login-row {
+      display: flex;
+      flex-direction: column;
+    }
+    .login-break {
+      display: block;
+    }
+    .login-btn {
+      margin-bottom: 12px;
+    }
+  }
