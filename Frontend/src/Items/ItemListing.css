@@ -1,0 +1,5 @@
+@media screen and (max-width: 440px) {
+  .card-img {
+    margin-top: 35px !important;
+  }
+}
