@@ -2,7 +2,7 @@ import "./App.css";
 import Layout from "./Layout/Layout";
 import { Route, Routes, Navigate } from "react-router-dom";
 import LandingPage from "./LandingPage/LandingPage";
-import Login2 from "./Login/Login2";
+import Login2 from "./Login/Login2.jsx";
 import Dashboard from "./Dashboard/Dashboard";
 import Nav from "./Navbar/Navbar";
 import Footer from "./Footer/Footer";
