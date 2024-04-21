@@ -66,13 +66,18 @@ function ParticularItem() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("bid price is : ", data);
-
+    console.log("bid price is : ", typeof Number(data));
+    console.log("current price is : ", typeof Number(item.basePrice));
     setErrors({
       priceError: "",
     });
 
-    if (data === "" || Number(data) <= Number(item.basePrice)) {
+    if (
+      // isNaN(Number(data)) ||
+      data.price === "" ||
+      Number(data.price) <= Number(item.basePrice) ||
+      Number(data.price) <= Number(item?.currentPrice)
+    ) {
       setErrors((prevData) => ({
         ...prevData,
         priceError: "invalid",
