@@ -174,6 +174,22 @@ const deleteItem = async (req, res) => {
   }
 };
 
+// Update item status based on end time
+const updateItemStatus = async () => {
+  try {
+    const items = await Product.find();
+
+    items.forEach(async (item) => {
+      if (item.expire < new Date() && item.status === "posted") {
+        item.status = "expired";
+        await item.save();
+      }
+    });
+  } catch (error) {
+    throw new Error("Error updating item status: " + error.message);
+  }
+};
+
 export {
   addItem,
   getItem,
@@ -182,4 +198,5 @@ export {
   getPosted,
   getSaved,
   saveItem,
+  updateItemStatus,
 };
