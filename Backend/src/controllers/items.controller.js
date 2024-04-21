@@ -5,8 +5,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const addItem = async (req, res) => {
   try {
-    const { name, quantity, category, basePrice, status } = req.body.product;
-    console.log(req.body.product, "Hello");
+    const {name,quantity,category,basePrice,status,description,timePeriod} = req.body.product;
+    //console.log(req.body.product, "Hello");
     const new_item = new Product({
       name: name,
       category: category,
@@ -14,6 +14,8 @@ const addItem = async (req, res) => {
       quantity: quantity,
       status: status,
       seller: req.user._id,
+      description:description,
+      expire:timePeriod
     });
     //console.log("Hi");
     const result = await new_item.save();
