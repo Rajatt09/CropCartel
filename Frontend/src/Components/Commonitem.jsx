@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ApiCall from "../../utils/ApiCall";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import "./Commonitem.css";
 
 function CommonItem({ name, id }) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function CommonItem({ name, id }) {
     category: "",
     quantity: "",
     // description: "",
-    // timePeriod: "",
+    timePeriod: "",
     status: "",
     basePrice: "",
   });
@@ -26,7 +27,7 @@ function CommonItem({ name, id }) {
     categoryerror: "",
     quantityerror: "",
     // descriptionerror: "",
-    // timePerioderror: "",
+    timePerioderror: "",
     basePriceerror: "",
 
     // cropImage: ""
@@ -45,6 +46,7 @@ function CommonItem({ name, id }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("name : ", name, "value : ", value);
     setData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -60,7 +62,7 @@ function CommonItem({ name, id }) {
       categoryerror: "",
       quantityerror: "",
       //   descriptionerror: "",
-      //   timePerioderror: "",
+      timePerioderror: "",
       basePriceerror: "",
       statuserror: "",
     });
@@ -77,6 +79,14 @@ function CommonItem({ name, id }) {
       setErrors((prevData) => ({
         ...prevData,
         categoryerror: "invalid",
+      }));
+      return;
+    }
+
+    if (data.timePeriod === "") {
+      setErrors((prevData) => ({
+        ...prevData,
+        timePerioderror: "invalid",
       }));
       return;
     }
@@ -232,17 +242,33 @@ function CommonItem({ name, id }) {
         </div>
         <Form.Group as={Col} controlId="formGridupiid">
           <Form.Label>Time Period</Form.Label>
-          <Form.Control
+          {/* <Form.Control
             onChange={handleChange}
-            value={data.upiId || ""}
+            value={data.timePeriod}
             name="timePeriod"
-            type="text"
+            type="datetime-local"
             placeholder="time period"
+            style={{ backgroundColor: "rgba(0,0,0,0.2)" }}
             isInvalid={errors.timePerioderror === "invalid"}
-          />
-          <Form.Control.Feedback type="invalid">
-            Please enter time period.
-          </Form.Control.Feedback>
+          /> */}
+
+          <div>
+            <input
+              type="datetime-local"
+              id="datetime"
+              value={data.timePeriod}
+              onChange={handleChange}
+              name="timePeriod"
+            />
+          </div>
+
+          {errors.timePerioderror === "invalid" ? (
+            <Form.Control.Feedback>
+              Please enter time period.
+            </Form.Control.Feedback>
+          ) : (
+            ""
+          )}
         </Form.Group>
       </Row>
 
