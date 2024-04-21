@@ -5,7 +5,15 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const addItem = async (req, res) => {
   try {
-    const {name,quantity,category,basePrice,status,description,timePeriod} = req.body.product;
+    const {
+      name,
+      quantity,
+      category,
+      basePrice,
+      status,
+      description,
+      timePeriod,
+    } = req.body.product;
     //console.log(req.body.product, "Hello");
     const new_item = new Product({
       name: name,
@@ -14,8 +22,8 @@ const addItem = async (req, res) => {
       quantity: quantity,
       status: status,
       seller: req.user._id,
-      description:description,
-      expire:timePeriod
+      description: description,
+      expire: timePeriod,
     });
     //console.log("Hi");
     const result = await new_item.save();
@@ -176,6 +184,42 @@ const deleteItem = async (req, res) => {
   }
 };
 
+const gettingSold = async (req, res) => {
+  try {
+    //const {id} = req.user;
+    const items = await Product.find({
+      status: "expired",
+      seller: req.user._id,
+    });
+    return res
+      .status(200)
+      .json(new ApiResponse(200, items, "Items are succesfully rendered"));
+  } catch (error) {
+    console.log("error occured while rendering the sold items");
+    res
+      .status(400)
+      .json(new ApiError(400, "error occured while rendering sold items"));
+  }
+};
+
+const gettingBought = async (req, res) => {
+  try {
+    //const {id} = req.user;
+    const items = await Product.find({
+      status: "expired",
+      buyer: req.user._id,
+    });
+    return res
+      .status(200)
+      .json(new ApiResponse(200, items, "Items are succesfully rendered"));
+  } catch (error) {
+    console.log("error occured while rendering the bought items");
+    res
+      .status(400)
+      .json(new ApiError(400, "error occured while rendering bought items"));
+  }
+};
+
 // Update item status based on end time
 const updateItemStatus = async () => {
   try {
@@ -200,5 +244,7 @@ export {
   getPosted,
   getSaved,
   saveItem,
+  gettingSold,
+  gettingBought,
   updateItemStatus,
 };
