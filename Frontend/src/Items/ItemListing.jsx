@@ -37,11 +37,18 @@ export default function ItemListing() {
   const description =
     "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.";
   const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
+    if (text?.length > maxLength) {
       return text.substring(0, maxLength) + " .....";
     } else {
       return text;
     }
+  };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // You can customize the date format as needed
+  };
+  const capitalizeFirstLetter = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   };
   return (
     <div className="page-mid-section2">
@@ -96,11 +103,21 @@ export default function ItemListing() {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <MDBCardTitle>{item.name}</MDBCardTitle>
-                    <MDBCardTitle>{item.category}</MDBCardTitle>
+                    <MDBCardTitle>
+                      {capitalizeFirstLetter(item.name)}
+                    </MDBCardTitle>
+                    <MDBCardTitle>
+                      {capitalizeFirstLetter(item.category)}
+                    </MDBCardTitle>
                   </div>
 
-                  <MDBCardText>{truncateText(description, 80)}</MDBCardText>
+                  <MDBCardText className="itemlisting-desciption">
+                    {truncateText(
+                      item.description ||
+                        "Details of the product are not provided",
+                      80
+                    )}
+                  </MDBCardText>
                   {/* <p className="text-truncate mb-4 mb-md-0">
                       There are many variations of passages of Lorem Ipsum
                       available, but the majority have suffered alteration in
@@ -114,9 +131,14 @@ export default function ItemListing() {
                   </MDBCardText>
                   <MDBCardText>
                     <small className="text-muted">
-                      Time Remaining : &nbsp; &nbsp;
+                      <small style={{ fontWeight: "bold", fontSize: "14px" }}>
+                        Available to bid till :
+                      </small>{" "}
+                      &nbsp;
+                      {formatDate(item.expire) || " bid period is not provided"}
+                      <br />
                       <MDBBadge color="success" pill>
-                        Awaiting
+                        Active
                       </MDBBadge>
                     </small>
                   </MDBCardText>

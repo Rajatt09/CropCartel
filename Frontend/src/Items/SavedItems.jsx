@@ -82,6 +82,13 @@ function SavedItems() {
     return date.toLocaleString(); // You can customize the date format as needed
   };
 
+  const capitalizeFirstLetter = (str) => {
+    if (str?.length > 0) {
+      return str?.charAt(0).toUpperCase() + str?.slice(1);
+    }
+    return str;
+  };
+
   return (
     <div className="page-mid-section2">
       <h1 style={{ textAlign: "center", paddingTop: "20px" }}>Saved Items</h1>
@@ -118,7 +125,7 @@ function SavedItems() {
                       </MDBRipple>
                     </MDBCol>
                     <MDBCol md="6" lg="5">
-                      <h5>{item.name || "Name"}</h5>
+                      <h5>{capitalizeFirstLetter(item?.name) || "Name"}</h5>
                       <div className="d-flex flex-row justify-content-between">
                         {/* <div className="text-danger mb-1 me-2">
                          <MDBIcon fas icon="star" />
@@ -126,20 +133,26 @@ function SavedItems() {
                          <MDBIcon fas icon="star" />
                          <MDBIcon fas icon="star" />
                        </div> */}
-                        <span>Category : {item.category || ""}</span>
+                        <span>
+                          Category :{" "}
+                          {capitalizeFirstLetter(item?.category) || ""}
+                        </span>
                       </div>
                       <div className="d-flex mb-2 flex-row justify-content-between">
-                        <span>Quantity : {item.quantity || ""}</span>
+                        <span>
+                          Quantity :{" "}
+                          {capitalizeFirstLetter(item?.quantity) || ""}
+                        </span>
                       </div>
 
                       <p className=" mb-4 mb-md-0">
-                        There are many variations of passages of Lorem Ipsum
-                        available, but the majority have suffered alteration in
-                        some form, by injected humour, or randomised words which
-                        don't look even slightly believable.
+                        {item?.description ||
+                          "There are many variations of passages of Lorem Ipsum"}
                       </p>
                       <div>
-                        <h4 className="mb-2 mt-2 me-1">Time Period : </h4>
+                        <h4 className="mb-2 mt-2 me-1">
+                          End Date for Bidding : {formatDate(item?.expire)}
+                        </h4>
                       </div>
                     </MDBCol>
 

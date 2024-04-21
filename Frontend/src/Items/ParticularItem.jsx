@@ -17,19 +17,17 @@ import { useParams } from "react-router-dom";
 import ApiCall from "../../utils/ApiCall";
 import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import io from "socket.io-client"
+import io from "socket.io-client";
 
 function ParticularItem() {
-
-  const socket=io.connect("http://localhost:8001")
-
+  const socket = io.connect("http://localhost:8001");
 
   const id = useParams().id;
 
   const [item, setItem] = useState({});
   const [data, setData] = useState({});
   const [userProfile, setUserProfile] = useState({
-    price : "",
+    price: "",
   });
   const [errors, setErrors] = useState({
     priceError: "",
@@ -44,7 +42,7 @@ function ParticularItem() {
         setUserProfile(temp2);
 
         // console.log("temp", temp);
-        console.log("userData is here :", userProfile); 
+        console.log("userData is here :", userProfile);
         const temp = response.data.data || {};
 
         setItem(temp);
@@ -74,11 +72,7 @@ function ParticularItem() {
       priceError: "",
     });
 
-    if (
-      data === "" ||
-      Number(data) <= Number(item.basePrice)
-        
-    ) {
+    if (data === "" || Number(data) <= Number(item.basePrice)) {
       setErrors((prevData) => ({
         ...prevData,
         priceError: "invalid",
@@ -100,35 +94,41 @@ function ParticularItem() {
     //   }
     // };
     // bidding();
-      
-      const new_bid={
-        _id_user:userProfile._id,
-        _id_item:item._id,
-        currentPrice:Number(data.price)
-      }
-      console.log("Inside Frontend:",new_bid)
-      socket.emit("send_message",new_bid);
-      setData(() => ({
-      
-        price: "",
-      }));
-    };
 
-    useEffect(() => {
-    
-      socket.on("receive_message", (new_item) => {
-        setItem(new_item);
-      });
-    }, [socket]);
-    
+    const new_bid = {
+      _id_user: userProfile._id,
+      _id_item: item._id,
+      currentPrice: Number(data.price),
+    };
+    console.log("Inside Frontend:", new_bid);
+    socket.emit("send_message", new_bid);
+    setData(() => ({
+      price: "",
+    }));
+  };
+
+  useEffect(() => {
+    socket.on("receive_message", (new_item) => {
+      setItem(new_item);
+    });
+  }, [socket]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString(); // You can customize the date format as needed
   };
+  const capitalizeFirstLetter = (str) => {
+    if (str?.length > 0) {
+      return str?.charAt(0).toUpperCase() + str?.slice(1);
+    }
+    return str;
+  };
 
   return (
     <div className="page-mid-section2">
-      <h1 style={{ textAlign: "center", paddingTop: "20px" }}>ITEM NAME</h1>
+      <h1 style={{ textAlign: "center", paddingTop: "20px" }}>
+        ITEM : {capitalizeFirstLetter(item?.name)}
+      </h1>
       <MDBContainer fluid>
         <MDBRow className="justify-content-center mb-0">
           <MDBCol md="12" xl="9">
@@ -161,7 +161,7 @@ function ParticularItem() {
                     </MDBRipple>
                   </MDBCol>
                   <MDBCol md="6" lg="5">
-                    <h5>{item.name}</h5>
+                    <h5>{capitalizeFirstLetter(item?.name)}</h5>
                     <div className="d-flex flex-row justify-content-between">
                       {/* <div className="text-danger mb-1 me-2">
                         <MDBIcon fas icon="star" />
@@ -169,7 +169,9 @@ function ParticularItem() {
                         <MDBIcon fas icon="star" />
                         <MDBIcon fas icon="star" />
                       </div> */}
-                      <span>Category : {item.category}</span>
+                      <span>
+                        Category : {capitalizeFirstLetter(item.category)}
+                      </span>
                     </div>
                     <div className="d-flex mb-2 flex-row justify-content-between">
                       <span>Quantity : {item.quantity}</span>
@@ -182,7 +184,9 @@ function ParticularItem() {
                       don't look even slightly believable.
                     </p>
                     <div>
-                      <h4 className="mb-2 mt-2 me-1">Time Remaining : </h4>
+                      <h4 className="mb-2 mt-2 me-1">
+                        Available to bid till : {formatDate(item?.expiry)}
+                      </h4>
                     </div>
 
                     <div className="mb-2 text-muted small">
@@ -208,7 +212,7 @@ function ParticularItem() {
                       // className="mb-1 me-1"
                       >
                         {" "}
-                        Current Price : &#8377;{item.currentPrice || "0.00"}
+                        Current Price : &#8377;{item?.currentPrice || "0.00"}
                       </h4>
                       {/* <span className="text-danger">
                         <s>$20.99</s>
