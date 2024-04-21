@@ -16,6 +16,8 @@ import {
   deleteItem,
   getItem,
   saveItem,
+  gettingSold,
+  gettingBought
 } from "../controllers/items.controller.js";
 import validateItems from "../utils/validateItems.js";
 // import catchAsync from "../utils/catchAsync.js";
@@ -59,5 +61,9 @@ router
 router.route("/saveItem/:id").post(verifyJWT, saveItem);
 
 router.route("/getItems/:id").delete(verifyJWT, deleteItem);
+
+router.route("/getSold").get(verifyJWT,gettingSold)
+
+router.route("getBought").get(verifyJWT,gettingBought);
 
 export default router;

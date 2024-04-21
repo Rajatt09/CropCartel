@@ -176,6 +176,38 @@ const deleteItem = async (req, res) => {
   }
 };
 
+const gettingSold=async(req,res)=>{
+  try{
+    const {id} = req.user;
+    const items=await Product.find({status:'expired',seller:id});
+    return res
+  .status(200)
+  .json(new ApiResponse(200,items,"Items are succesfully rendered"));
+  }
+  catch(error){
+    console.log("error occured while rendering the sold items");
+    res
+    .status(400)
+    .json(new ApiError(400,"error occured while rendering sold items"));
+  }
+}
+
+const gettingBought=async(req,res)=>{
+  try{
+    const {id} = req.user;
+    const items=await Product.find({status:'expired',buyer:id});
+    return res
+  .status(200)
+  .json(new ApiResponse(200,items,"Items are succesfully rendered"));
+  }
+  catch(error){
+    console.log("error occured while rendering the bought items");
+    res
+    .status(400)
+    .json(new ApiError(400,"error occured while rendering bought items"));
+  }
+}
+
 export {
   addItem,
   getItem,
@@ -184,4 +216,6 @@ export {
   getPosted,
   getSaved,
   saveItem,
+  gettingSold,
+  gettingBought
 };
