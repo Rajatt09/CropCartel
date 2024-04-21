@@ -185,7 +185,7 @@ function ParticularItem() {
                     </p>
                     <div>
                       <h4 className="mb-2 mt-2 me-1">
-                        Available to bid till : {formatDate(item?.expiry)}
+                        Available to bid till : {formatDate(item?.expire)}
                       </h4>
                     </div>
 

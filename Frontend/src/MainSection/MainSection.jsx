@@ -6,6 +6,7 @@ import ParticularItem from "../Items/ParticularItem";
 import History from "../Items/History";
 import SavedItems from "../Items/SavedItems";
 import AddItem from "../Items/AddItem";
+import BidderHistory from "../Items/BidderHistory";
 
 const MainSection = () => {
   const [section, setSection] = useState("");
@@ -29,7 +30,7 @@ const MainSection = () => {
   if (section === "savedItems") return <SavedItems />;
   if (section === "sold-history") return <History type="Sold" status="SOLD" />;
   if (section === "bought-history")
-    return <History type="Bought" status="BOUGHT" />;
+    return <BidderHistory type="Bought" status="BOUGHT" />;
 
   if (section === "additem") return <AddItem />;
   if (itemUrl === "item") return <ParticularItem />;

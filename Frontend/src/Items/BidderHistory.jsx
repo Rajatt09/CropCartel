@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 import ApiCall from "../../utils/ApiCall";
 import { useParams } from "react-router-dom";
 
-export default function History({ type, status }) {
+export default function BidderHistory({ type, status }) {
   const { id } = useParams;
   const [items, setItems] = useState([]);
 
@@ -25,7 +25,7 @@ export default function History({ type, status }) {
       try {
         let response;
 
-        response = await ApiCall("/users/getSold", "GET", null);
+        response = await ApiCall("/users/getBought", "GET", null);
 
         const temp = response.data.data || {};
 
@@ -133,25 +133,16 @@ export default function History({ type, status }) {
                   <MDBCardText>
                     <span className="text-muted">
                       Base Price : &#x20B9; {item.basePrice}
-                      &nbsp; &nbsp; {type} Price :{" "}
-                      {/* {item?.currentPrice
-                        ? `&#x20B9; ${item.currentPrice}`
-                        : "00.00"} */}
-                      &#x20B9; {item?.currentPrice || "00.00"}
+                      &nbsp; &nbsp; {type} Price : &#x20B9;{" "}
+                      {item.basePrice || ""}
                     </span>
                   </MDBCardText>
                   <MDBCardText>
                     <small className="text-muted">
                       Status : &nbsp; &nbsp;
-                      {item?.currentPrice ? (
-                        <MDBBadge color="success" pill>
-                          Sold
-                        </MDBBadge>
-                      ) : (
-                        <MDBBadge color="danger" pill>
-                          Item not purchased by anyone
-                        </MDBBadge>
-                      )}
+                      <MDBBadge color="success" pill>
+                        Bought
+                      </MDBBadge>
                     </small>
                   </MDBCardText>
                   <MDBCardText
@@ -169,6 +160,8 @@ export default function History({ type, status }) {
             </MDBRow>
           </MDBCard>
         ))}
+
+        {items.empty ? "Bought history is empty" : ""}
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ function Nav() {
     <>
       <Navbar
         className="bg-body-tertiary desktop-nav"
-        style={{ position: "fixed", width: "100%", zIndex: "10" }}
+        style={{ position: "fixed", top: "0", width: "100%", zIndex: "10" }}
       >
         <Container>
           <Navbar.Brand href="/">Logo</Navbar.Brand>
