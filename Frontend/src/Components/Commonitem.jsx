@@ -17,7 +17,7 @@ function CommonItem({ name, id }) {
     name: "",
     category: "",
     quantity: "",
-    // description: "",
+    description: "",
     timePeriod: "",
     status: "",
     basePrice: "",
@@ -26,7 +26,7 @@ function CommonItem({ name, id }) {
     nameerror: "",
     categoryerror: "",
     quantityerror: "",
-    // descriptionerror: "",
+    descriptionerror: "",
     timePerioderror: "",
     basePriceerror: "",
 
@@ -61,7 +61,7 @@ function CommonItem({ name, id }) {
       nameerror: "",
       categoryerror: "",
       quantityerror: "",
-      //   descriptionerror: "",
+      descriptionerror: "",
       timePerioderror: "",
       basePriceerror: "",
       statuserror: "",
@@ -79,6 +79,14 @@ function CommonItem({ name, id }) {
       setErrors((prevData) => ({
         ...prevData,
         categoryerror: "invalid",
+      }));
+      return;
+    }
+
+    if (data.description === "") {
+      setErrors((prevData) => ({
+        ...prevData,
+        descriptionerror: "invalid",
       }));
       return;
     }

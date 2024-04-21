@@ -108,6 +108,10 @@ function ParticularItem() {
       }
       console.log("Inside Frontend:",new_bid)
       socket.emit("send_message",new_bid);
+      setData(() => ({
+      
+        price: "",
+      }));
     };
 
     useEffect(() => {
