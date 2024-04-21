@@ -64,6 +64,6 @@ router.route("/getItems/:id").delete(verifyJWT, deleteItem);
 
 router.route("/getSold").get(verifyJWT,gettingSold)
 
-router.route("getBought").get(verifyJWT,gettingBought);
+router.route("/getBought").get(verifyJWT,gettingBought);
 
 export default router;

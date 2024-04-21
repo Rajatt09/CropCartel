@@ -178,8 +178,8 @@ const deleteItem = async (req, res) => {
 
 const gettingSold=async(req,res)=>{
   try{
-    const {id} = req.user;
-    const items=await Product.find({status:'expired',seller:id});
+    //const {id} = req.user;
+    const items=await Product.find({status:'expired',seller:req.user._id});
     return res
   .status(200)
   .json(new ApiResponse(200,items,"Items are succesfully rendered"));
@@ -194,8 +194,8 @@ const gettingSold=async(req,res)=>{
 
 const gettingBought=async(req,res)=>{
   try{
-    const {id} = req.user;
-    const items=await Product.find({status:'expired',buyer:id});
+    //const {id} = req.user;
+    const items=await Product.find({status:'expired',buyer:req.user._id});
     return res
   .status(200)
   .json(new ApiResponse(200,items,"Items are succesfully rendered"));

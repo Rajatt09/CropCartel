@@ -23,16 +23,16 @@ export default function History({ type, status }) {
   useEffect(() => {
     const getitemdetails = async () => {
       try {
-        let response;
+        // let response;
 
-        //   response = await ApiCall("", "GET", null);
+        // response = await ApiCall("/getSold", "GET", null);
 
         // const temp = response.data.data || {};
 
-        // setItems(temp);
+        //setItems(temp);
 
-        // console.log("temp", temp);
-        // console.log("itemData", items);
+        console.log("temp", temp);
+        console.log("itemData", items);
       } catch (error) {
         console.error("Error while fetching history: ", error);
       }
@@ -125,17 +125,17 @@ export default function History({ type, status }) {
                   </MDBCardText>
                   <MDBCardText>
                     <small className="text-muted">
-                      Status : &nbsp; &nbsp;
+                      Status : &nbsp; &nbsp; 
                       <MDBBadge color="success" pill>
-                        {status}
+                        Sold
                       </MDBBadge>
                     </small>
                   </MDBCardText>
                   <MDBCardText
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <small className="text-muted">Created on :</small>
-                    <small className="text-muted">{type} on :</small>
+                    <small className="text-muted">Created on :{item.createdAt}</small>
+                    <small className="text-muted">Expired on :{item.expire}</small>
                   </MDBCardText>
                 </MDBCardBody>
               </MDBCol>
