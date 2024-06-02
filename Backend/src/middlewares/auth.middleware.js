@@ -4,10 +4,18 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 export const verifyJWT = async (req, res, next) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: isProduction,
+    sameSite: isProduction ? "Strict" : "Lax",
   };
+
+  // const options = {
+  //   httpOnly: true,
+  //   secure: true,
+  // };
   try {
     const token =
       req.cookies?.accessToken ||
