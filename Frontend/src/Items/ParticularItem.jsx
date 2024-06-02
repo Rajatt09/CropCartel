@@ -24,7 +24,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ParticularItem() {
-  const socket = io.connect("http://localhost:8001");
+  const socket = io.connect(import.meta.env.VITE_SOCKET_SERVER_URL);
 
   const id = useParams().id;
 
