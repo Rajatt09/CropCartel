@@ -7,7 +7,7 @@ export const verifyJWT = async (req, res, next) => {
   const options = {
     httpOnly: true,
     secure: true,
-    sameSite: "Strict",
+    sameSite: "None",
   };
   try {
     const token =
