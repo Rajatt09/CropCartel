@@ -131,17 +131,10 @@ const loginUser = async (req, res) => {
       "-password -refreshToken"
     );
 
-    // const options = {
-    //   httpOnly: true,
-    //   secure: true,
-    // };
-
-    const isProduction = process.env.NODE_ENV === "production";
-
     const options = {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "Strict" : "Lax",
+      secure: true,
+      sameSite: "Strict",
     };
 
     return res
@@ -184,17 +177,9 @@ const logoutUser = async function (req, res) {
       }
     );
 
-    // const options = {
-    //   httpOnly: true,
-    //   secure: true,
-    // };
-
-    const isProduction = process.env.NODE_ENV === "production";
-
     const options = {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "Strict" : "Lax",
+      sameSite: "Strict",
     };
 
     return res
