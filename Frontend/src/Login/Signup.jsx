@@ -3,15 +3,17 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import "./Login.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Toast from "react-bootstrap/Toast";
 
 function Signup() {
   const [validated, setValidated] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [data, setData] = useState({
     name: "",
@@ -25,6 +27,19 @@ function Signup() {
     emailerror: "",
     passworderror: "",
   });
+
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // Clean up the effect
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [loading]);
 
   const phoneRegex = /^\d{10}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -78,7 +93,7 @@ function Signup() {
       }));
       return;
     }
-
+    setLoading(true);
     try {
       const res = await axios.post(`/users/register`, data);
       console.log(res);
@@ -107,6 +122,8 @@ function Signup() {
         // alert(error.message);
       }
       // alert("error occured while signing in.Please try again later.");
+    } finally {
+      setLoading(false);
     }
 
     // If all validations pass, submit the form
@@ -249,6 +266,34 @@ function Signup() {
             </div>
           </Form>
         </div>
+      </div>
+      <div
+        style={{
+          position: "fixed",
+          zIndex: "20",
+          top: "0",
+          bottom: "0",
+          backgroundColor: "rgba(0,0,0,0.7)",
+          width: "100vw",
+          left: "0",
+          height: "100vh",
+
+          display: loading ? "flex" : "none",
+          alignItems: "center",
+          justifyContent: "center",
+          // marginBottom: "12px",
+        }}
+      >
+        <Toast
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div className="spinner-border text-success" role="status"></div>
+          <Toast.Body style={{ textAlign: "center" }}>Please Wait</Toast.Body>
+        </Toast>
       </div>
     </div>
   );
