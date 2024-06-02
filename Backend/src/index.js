@@ -13,8 +13,8 @@ connectDB()
       throw error;
     });
 
-    app.listen(process.env.Port || 8000, () => {
-      console.log(`Server running on port ${process.env.Port}`);
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`Server running on port ${process.env.PORT}`);
     });
   })
   .catch((err) => console.log("MONGODB connection failed ", err));
