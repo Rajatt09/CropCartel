@@ -2,6 +2,7 @@ import { Product } from "../models/product.model.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const addItem = async (req, res) => {
   try {
@@ -13,8 +14,15 @@ const addItem = async (req, res) => {
       status,
       description,
       timePeriod,
-    } = req.body.product;
-    //console.log(req.body.product, "Hello");
+    } = req.body;
+    const cropImageLocalPath = req.file?.path;
+    // console.log("crop image is: ", cropImageLocalPath);
+
+    let crop;
+    if (cropImageLocalPath) {
+      crop = await uploadOnCloudinary(cropImageLocalPath);
+    }
+
     const new_item = new Product({
       name: name,
       category: category,
@@ -24,6 +32,7 @@ const addItem = async (req, res) => {
       seller: req.user._id,
       description: description,
       expire: timePeriod,
+      cropImage: crop?.url || "",
     });
     //console.log("Hi");
     const result = await new_item.save();
@@ -37,7 +46,7 @@ const addItem = async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, result, " item added successfully"));
   } catch (error) {
-    console.error("error while adding item: ", err);
+    console.error("error while adding item: ", error);
     // throw new ApiError(500, "Internal Server Error");
     return res
       .status(500)
@@ -67,6 +76,7 @@ const getSaved = async (req, res) => {
 };
 
 const getPosted = async (req, res) => {
+  updateItemStatus();
   try {
     const items = await Product.find({
       status: "posted",
@@ -113,20 +123,27 @@ const getItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
+    // console.log(id);
     const item = await Product.findById(id);
     if (!item) {
-      res
-        .status(400)
-        .json(
-          new ApiError(400, "error occured while finding items to be updated")
-        );
+      res.status(400).json(new ApiError(400, "Item not found"));
     }
 
-    const updatedItem = await Product.findByIdAndUpdate(req.params.id, {
-      ...req.body.product,
+    let updateFields = { ...req.body };
+    const cropImageLocalPath = req.file?.path;
+    // console.log("crop image is: ", cropImageLocalPath);
+
+    if (cropImageLocalPath) {
+      const crop = await uploadOnCloudinary(cropImageLocalPath);
+      updateFields.cropImage = crop?.url || "";
+    }
+
+    const updatedItem = await Product.findByIdAndUpdate(id, updateFields, {
+      new: true,
     });
-    await updatedItem.save();
+    if (!updatedItem) {
+      return res.status(400).json(new ApiError(400, "Error updating item"));
+    }
     return res
       .status(200)
       .json(new ApiResponse(200, updatedItem, "item updated successfully"));
@@ -170,9 +187,42 @@ const saveItem = async (req, res) => {
 const deleteItem = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("reached deleted");
-    const result = await Product.findOneAndDelete({ id });
+    console.log("reached deleted", id);
+    const result = await Product.deleteOne({ _id: id });
     console.log(result);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "item deleted successfully"));
+  } catch (error) {
+    console.log("error occured while deleting items");
+    res
+      .status(400)
+      .json(new ApiError(400, "error occured while deleting item"));
+  }
+};
+
+const gettingDelete = async (req, res) => {
+  console.log("getting delete reached");
+  console.log(req.body, req.user);
+  try {
+    if (req.body.type == "seller") {
+      const result = await Product.updateOne(
+        { _id: req.body.id },
+        { $set: { sellerCount: 0 } }
+      );
+    } else if (req.body.type == "buyer") {
+      const result = await Product.updateOne(
+        { _id: req.body.id },
+        { $set: { buyerCount: 0 } }
+      );
+    }
+
+    const product = await Product.findById(req.body.id);
+
+    if (product.sellerCount === 0 && product.buyerCount === 0) {
+      await Product.deleteOne({ _id: req.body.id });
+    }
+
     return res
       .status(200)
       .json(new ApiResponse(200, {}, "item deleted successfully"));
@@ -187,10 +237,28 @@ const deleteItem = async (req, res) => {
 const gettingSold = async (req, res) => {
   try {
     //const {id} = req.user;
-    const items = await Product.find({
+    const itemsArray = await Product.find({
       status: "expired",
       seller: req.user._id,
+      sellerCount: 1,
     });
+
+    const items = itemsArray.map((item) => item.toObject());
+
+    await Promise.all(
+      items.map(async (item) => {
+        const buyer = await User.findById(item.buyer);
+        item.buyerName = buyer ? buyer.name : "Unknown";
+        item.buyerPhone = buyer ? buyer.phnumber : "Unknown";
+        item.buyerEmail = buyer ? buyer.email : "Unknown";
+        item.buyerState = buyer ? buyer.state : "Unknown";
+        item.buyerCity = buyer ? buyer.city : "Unknown";
+        return item;
+      })
+    );
+
+    // console.log(items);
+
     return res
       .status(200)
       .json(new ApiResponse(200, items, "Items are succesfully rendered"));
@@ -205,10 +273,26 @@ const gettingSold = async (req, res) => {
 const gettingBought = async (req, res) => {
   try {
     //const {id} = req.user;
-    const items = await Product.find({
+    const itemsArray = await Product.find({
       status: "expired",
       buyer: req.user._id,
+      buyerCount: 1,
     });
+
+    const items = itemsArray.map((item) => item.toObject());
+
+    await Promise.all(
+      items.map(async (item) => {
+        const seller = await User.findById(item.seller);
+        item.sellerName = seller ? seller.name : "Unknown";
+        item.sellerPhone = seller ? seller.phnumber : "Unknown";
+        item.sellerEmail = seller ? seller.email : "Unknown";
+        item.sellerState = seller ? seller.state : "Unknown";
+        item.sellerCity = seller ? seller.city : "Unknown";
+        return item;
+      })
+    );
+
     return res
       .status(200)
       .json(new ApiResponse(200, items, "Items are succesfully rendered"));
@@ -247,4 +331,5 @@ export {
   gettingSold,
   gettingBought,
   updateItemStatus,
+  gettingDelete,
 };

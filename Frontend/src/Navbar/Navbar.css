@@ -1,32 +1,33 @@
 .active {
-    color: blue !important;
-  }
-  
+  color: blue !important;
+}
+
+.mobile-nav {
+  display: none;
+}
+
+.offcanvas-show {
+  position: fixed !important;
+  z-index: 20 !important;
+}
+
+.offcanvas-li {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 1.5rem;
+  color: black;
+}
+.offcanvas-li:first-child {
+  margin-top: 20px;
+}
+
+@media screen and (max-aspect-ratio: 4/3) {
   .mobile-nav {
-    display: none;
+    display: block;
   }
-  
-  .offcanvas-show {
-    position: fixed !important;
-    z-index: 20 !important;
+  .desktop-nav {
+    /* display: none !important; */
+    pointer-events: none;
+    opacity: 0;
   }
-  
-  .offcanvas-li {
-    
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 1.5rem;
-    color: black;
-  }
-  .offcanvas-li:first-child {
-    margin-top: 20px;
-  }
-  
-  @media screen and (max-aspect-ratio: 4/3) {
-    .mobile-nav {
-      display: block;
-    }
-    .desktop-nav {
-      display: none !important;
-    }
-  }
+}

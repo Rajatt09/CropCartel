@@ -4,8 +4,8 @@ import React from "react";
 import EditItem from "../Components/EditItem";
 
 function MyVerticallyCenteredModal(props) {
-  console.log("item  modal is : ", props);
-  console.log(props);
+  // console.log("item  modal is : ", props);
+  // console.log(props);
   return (
     <Modal
       {...props}
@@ -13,13 +13,18 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header
+        style={{ backgroundColor: "rgba(46, 90, 136, 0.69)" }}
+        closeButton
+      >
         {/* <Modal.Title id="contained-modal-title-vcenter">Edit Item</Modal.Title> */}
       </Modal.Header>
       <EditItem item={props.item} id={props.item._id} />
 
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
+      <Modal.Footer style={{ backgroundColor: "rgba(46, 90, 136, 0.69)" }}>
+        <Button style={{ backgroundColor: "#b23b3b" }} onClick={props.onHide}>
+          Close
+        </Button>
       </Modal.Footer>
     </Modal>
   );
@@ -32,14 +37,16 @@ function ItemModal({ item }) {
     <>
       <Button
         style={{
-          backgroundColor: "white",
           boxShadow: "none",
-          color: "#0080FF",
-          border: "2px solid #0080FF",
+          color: "rgb(70, 135, 70)",
+          border: "2px solid rgb(70, 135, 70)",
+          backdropFilter: "blur(4px)",
+          backgroundColor: "rgba(255,255,255,0.6)",
+          padding: "10px 30px",
+          fontWeight: "600",
+          fontSize: "0.8rem",
         }}
-        className="mt-3 edit-button"
-        variant="primary"
-        size="sm"
+        className="mt-3"
         type="submit"
         onClick={() => setModalShow(true)}
       >

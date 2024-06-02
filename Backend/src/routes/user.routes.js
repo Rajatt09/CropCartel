@@ -17,7 +17,8 @@ import {
   getItem,
   saveItem,
   gettingSold,
-  gettingBought
+  gettingBought,
+  gettingDelete,
 } from "../controllers/items.controller.js";
 import validateItems from "../utils/validateItems.js";
 // import catchAsync from "../utils/catchAsync.js";
@@ -46,7 +47,7 @@ router
 
 router
   .route("/addItem")
-  .post(verifyJWT, validateItems, upload.single("cropImage"), addItem);
+  .post(verifyJWT, upload.single("cropImage"), validateItems, addItem);
 
 router.route("/getSaved").get(verifyJWT, getSaved);
 
@@ -56,14 +57,16 @@ router.route("/getItems/:id").get(verifyJWT, getItem);
 
 router
   .route("/getItems/:id")
-  .put(verifyJWT, validateItems, upload.single("cropImage"), updateItem);
+  .put(verifyJWT, upload.single("cropImage"), validateItems, updateItem);
 
 router.route("/saveItem/:id").post(verifyJWT, saveItem);
 
 router.route("/getItems/:id").delete(verifyJWT, deleteItem);
 
-router.route("/getSold").get(verifyJWT,gettingSold)
+router.route("/getdelete").post(verifyJWT, gettingDelete);
 
-router.route("/getBought").get(verifyJWT,gettingBought);
+router.route("/getSold").get(verifyJWT, gettingSold);
+
+router.route("/getBought").get(verifyJWT, gettingBought);
 
 export default router;

@@ -1,5 +1,31 @@
-@media screen and (max-width: 440px) {
-  .card-img {
-    margin-top: 35px !important;
+@media screen and (max-width: 767px) {
+  .dashboard-item-pic {
+    margin-top: 37px !important;
+  }
+}
+
+@media screen and (max-width: 910px) {
+  .history-time {
+    flex-direction: column;
+  }
+}
+
+.dashboard-wrapper {
+  margin-top: -21px;
+  margin-bottom: 11px;
+  background-image: url("./image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.history-wrap {
+  background-image: url("../Dashboard/image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media screen and (max-width: 768px) {
+  .history-pic-length {
+    height: 300px;
   }
 }

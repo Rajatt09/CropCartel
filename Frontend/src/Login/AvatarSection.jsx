@@ -38,8 +38,13 @@ const AvatarSection = () => {
   };
 
   return (
-    <div style={{ padding: "30px" }}>
-      <h2 style={{ textAlign: "center", padding: "35px 0px" }}>
+    <div className="profile-section" style={{ padding: "30px" }}>
+      <h2
+        style={{
+          textAlign: "center",
+          padding: "0px 0px 15px 0px",
+        }}
+      >
         Update Your Profile Picture
       </h2>
       <form onSubmit={handleSubmit}>
@@ -59,7 +64,11 @@ const AvatarSection = () => {
         <div className="mb-3" style={{ color: "red" }}>
           {errorMessage || ""}
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button
+          type="submit"
+          style={{ backgroundColor: "rgb(70, 135, 70)" }}
+          className="btn btn-primary"
+        >
           Upload
         </button>
       </form>

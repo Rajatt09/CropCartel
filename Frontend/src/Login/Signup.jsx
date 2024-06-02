@@ -7,6 +7,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Signup() {
   const [validated, setValidated] = useState(false);
@@ -37,7 +39,7 @@ function Signup() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(data);
+    // console.log(data);
 
     setErrors({
       nameerror: "",
@@ -81,10 +83,13 @@ function Signup() {
       const res = await axios.post(`/users/register`, data);
       console.log(res);
       if (res.status == 200) {
-        alert("user registered successful");
+        // alert("user registered successful");
+
         navigate("/login");
+        toast.success(`User registered successfully.`);
       } else {
-        alert("Invalid Credentials");
+        // alert("Invalid Credentials");
+        toast.error(`Invalid user credentials.`);
         return;
       }
     } catch (error) {
@@ -92,13 +97,14 @@ function Signup() {
       if (error.response) {
         const errorMessage = error.response.data.message;
         console.error("Error from backend:", errorMessage);
-        alert(errorMessage);
+        // alert(errorMessage);
       } else if (error.request) {
         // console.error("No response received from server");
-        alert("error occured while signing in.Please try again later.");
+        // alert("error occured while signing in.Please try again later.");
+        toast.error(`Error occured while signing in.Please try again later.`);
       } else {
         console.error("Error:", error.message);
-        alert(error.message);
+        // alert(error.message);
       }
       // alert("error occured while signing in.Please try again later.");
     }
@@ -114,95 +120,136 @@ function Signup() {
   };
 
   return (
-    <div className="login-form">
-      <h1 style={{ textAlign: "center", padding: "35px 0px" }}>Sign Up</h1>
-      <Form onSubmit={handleSubmit}>
-        <Row className="mb-3 login-row">
-          <Form.Group as={Col} controlId="formGridName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              onChange={handleChange}
-              name="name"
-              type="text"
-              placeholder="Enter name"
-              isInvalid={errors.nameerror === "invalid"}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please enter your name.
-            </Form.Control.Feedback>
-          </Form.Group>
+    <div className="login-back">
+      <ToastContainer />
+      <div className="login-back-inner">
+        <div className="login-form">
+          <h1
+            style={{ textAlign: "center", padding: "35px 0px", color: "white" }}
+          >
+            Sign Up
+          </h1>
+          <Form onSubmit={handleSubmit}>
+            <Row className="mb-3 login-row">
+              <Form.Group as={Col} controlId="formGridName">
+                <Form.Label style={{ color: "white" }}>
+                  Name{" "}
+                  <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </Form.Label>
+                <Form.Control
+                  onChange={handleChange}
+                  name="name"
+                  type="text"
+                  placeholder="Enter name"
+                  isInvalid={errors.nameerror === "invalid"}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your name.
+                </Form.Control.Feedback>
+              </Form.Group>
 
-          <div className="login-break">
-            <br />
-          </div>
-          <Form.Group as={Col} controlId="formGridNumber">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control
-              onChange={handleChange}
-              name="phnumber"
-              type="text"
-              placeholder="Phone Number"
-              isInvalid={errors.phnumbererror === "invalid"}
-            />
-            <Form.Control.Feedback type="invalid">
-              Please enter your valid phone number.
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Row>
+              <div className="login-break">
+                <br />
+              </div>
+              <Form.Group as={Col} controlId="formGridNumber">
+                <Form.Label style={{ color: "white" }}>
+                  Phone Number{" "}
+                  <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </Form.Label>
+                <Form.Control
+                  onChange={handleChange}
+                  name="phnumber"
+                  type="text"
+                  placeholder="Phone Number"
+                  isInvalid={errors.phnumbererror === "invalid"}
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please enter your valid phone number.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
 
-        <div className="login-break">
-          <br />
-        </div>
-        <Row className="mb-3 login-row">
-          <Form.Group as={Col} controlId="formGridEmail">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              onChange={handleChange}
-              name="email"
-              type="email"
-              isInvalid={errors.emailerror === "invalid"}
-              placeholder="Enter email"
-            />
-            <Form.Control.Feedback type="invalid">
-              Please choose an email.
-            </Form.Control.Feedback>
-          </Form.Group>
-          <div className="login-break">
-            <br />
-          </div>
-          <Form.Group as={Col} controlId="formGridPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              name="password"
-              onChange={handleChange}
-              type="password"
-              isInvalid={errors.passworderror === "invalid"}
-              placeholder="Password"
-            />
-            <Form.Control.Feedback type="invalid">
-              Please choose a password.
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Row>
+            <div className="login-break">
+              <br />
+            </div>
+            <Row className="mb-3 login-row">
+              <Form.Group as={Col} controlId="formGridEmail">
+                <Form.Label style={{ color: "white" }}>
+                  Email{" "}
+                  <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </Form.Label>
+                <Form.Control
+                  onChange={handleChange}
+                  name="email"
+                  type="email"
+                  isInvalid={errors.emailerror === "invalid"}
+                  placeholder="Enter email"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please choose an email.
+                </Form.Control.Feedback>
+              </Form.Group>
+              <div className="login-break">
+                <br />
+              </div>
+              <Form.Group as={Col} controlId="formGridPassword">
+                <Form.Label style={{ color: "white" }}>
+                  Password{" "}
+                  <span style={{ color: "red", fontWeight: "bold" }}>*</span>
+                </Form.Label>
+                <Form.Control
+                  name="password"
+                  onChange={handleChange}
+                  type="password"
+                  isInvalid={errors.passworderror === "invalid"}
+                  placeholder="Password"
+                />
+                <Form.Control.Feedback type="invalid">
+                  Please choose a password.
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Row>
 
-        {/* <Form.Group className="position-relative mb-3">
+            {/* <Form.Group className="position-relative mb-3">
           <Form.Label>Avatar</Form.Label>
           <Form.Control type="file" name="file" />
         </Form.Group> */}
-        <div>
-          <li>
-            Already have an account? <Link to="/login">Login</Link>
-          </li>
+            <div>
+              <li style={{ color: "white" }}>
+                Already have an account?{" "}
+                <Link
+                  style={{
+                    color: "white",
+                    textDecoration: "underline",
+                  }}
+                  to="/login"
+                >
+                  Login
+                </Link>
+              </li>
+            </div>
+            <div
+              className="login-btn"
+              style={{ textAlign: "center", padding: "15px" }}
+            >
+              <button
+                style={{
+                  backgroundColor: "rgb(70, 135, 70)",
+                  padding: "8px 40px",
+                  fontSize: "1rem",
+                  border: "none",
+                  borderRadius: "10px",
+                }}
+                className="main-button-css"
+                variant="primary"
+                type="submit"
+              >
+                Sign up
+              </button>
+            </div>
+          </Form>
         </div>
-        <div
-          className="login-btn"
-          style={{ textAlign: "center", padding: "15px" }}
-        >
-          <Button className="main-button-css" variant="primary" type="submit">
-            Submit
-          </Button>
-        </div>
-      </Form>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,31 @@
+.landing-block {
+  background-image: url("./landing.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.landing-heading {
+  color: white;
+  font-size: 3rem;
+}
+
+.card-land {
+  filter: blur(6px);
+}
+
+.underline::after {
+  content: "";
+  display: block;
+  width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  border-radius: 10px;
+  height: 3px;
+  background-color: white;
+}
+
+@media screen and (max-width: 595px) {
+  .land-box {
+    width: 100% !important;
+  }
+}

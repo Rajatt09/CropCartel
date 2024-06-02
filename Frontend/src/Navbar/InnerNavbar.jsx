@@ -25,8 +25,8 @@ function InnerNavbar() {
 
         setUserProfile(temp);
 
-        console.log("temp", temp);
-        console.log("userData", userProfile);
+        // console.log("temp", temp);
+        // console.log("userData", userProfile);
       } catch (error) {
         console.error("Error while fetching User: ", error);
       }
@@ -34,7 +34,7 @@ function InnerNavbar() {
     getuserdetails();
   }, []);
   return (
-    <div>
+    <div style={{ backgroundColor: "yellow" }}>
       <div>
         {userProfile.avatar ? (
           <Link to="/user/myprofile">
@@ -48,6 +48,7 @@ function InnerNavbar() {
                 zIndex: "10",
                 height: "40px",
                 width: "40px",
+                border: "1.8px solid white",
               }}
             />
           </Link>
@@ -56,13 +57,14 @@ function InnerNavbar() {
             <Link to="/user/myprofile">
               <IoPersonSharp
                 style={{
-                  position: "absolute",
+                  position: "fixed",
                   top: "13.5px",
                   right: "20px",
                   zIndex: "10",
-                  border: "2px solid gray",
+                  border: "2px solid white",
                   borderRadius: "50%",
                   padding: "1px",
+                  color: "white",
                   //   height: "80px",
                   fontSize: "2rem",
                 }}
@@ -76,40 +78,34 @@ function InnerNavbar() {
         className="bg-body-tertiary desktop-nav"
         style={{
           position: "fixed",
-          top: "0",
+          // backgroundColor: "black",
+          top: "8px",
           // right: "0",
-          left: "28%",
+          left: "25%",
+
           boxShadow: "none",
-          width: "40%",
+          width: "50%",
           zIndex: "10",
         }}
       >
         <Container>
           {/* <Navbar.Brand>HEllo</Navbar.Brand> */}
           <NavLink to="/user/dashboard">
-            <Navbar.Text>Dashboard</Navbar.Text>
+            <Navbar.Text style={{ color: "white" }}>Dashboard</Navbar.Text>
           </NavLink>
           <NavLink to="/user/savedItems">
-            <Navbar.Text>Saved Items</Navbar.Text>
+            <Navbar.Text style={{ color: "white" }}>Saved Items</Navbar.Text>
           </NavLink>
 
-          <Navbar.Text>
-            {" "}
-            <DropdownButton
-              style={{ backgroundColor: "white" }}
-              title="History"
-            >
-              <NavLink to="/user/sold-history">
-                <Dropdown.Item href="#/action-1">Items Sold</Dropdown.Item>
-              </NavLink>
-              <NavLink to="/user/bought-history">
-                <Dropdown.Item href="#/action-1">Items Bought</Dropdown.Item>
-              </NavLink>
-            </DropdownButton>
-          </Navbar.Text>
+          <NavLink to="/user/sold-history">
+            <Navbar.Text style={{ color: "white" }}>Items Sold</Navbar.Text>
+          </NavLink>
+          <NavLink to="/user/bought-history">
+            <Navbar.Text style={{ color: "white" }}>Items Bought</Navbar.Text>
+          </NavLink>
 
           <NavLink to="/user/additem">
-            <Navbar.Text>Add Item</Navbar.Text>
+            <Navbar.Text style={{ color: "white" }}>Add Item</Navbar.Text>
           </NavLink>
 
           {/* <Navbar.Text>Link1</Navbar.Text> */}

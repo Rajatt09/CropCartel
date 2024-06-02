@@ -18,14 +18,20 @@ import ApiCall from "../../utils/ApiCall";
 import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import io from "socket.io-client";
+import Toast from "react-bootstrap/Toast";
+import CloseButton from "react-bootstrap/esm/CloseButton";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ParticularItem() {
   const socket = io.connect("http://localhost:8001");
 
   const id = useParams().id;
 
+  const [Confirm, setConfirm] = useState(false);
+
   const [item, setItem] = useState({});
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ price: "" });
   const [userProfile, setUserProfile] = useState({
     price: "",
   });
@@ -42,19 +48,32 @@ function ParticularItem() {
         setUserProfile(temp2);
 
         // console.log("temp", temp);
-        console.log("userData is here :", userProfile);
+        // console.log("userData is here :", userProfile);
         const temp = response.data.data || {};
 
         setItem(temp);
 
-        console.log("temp", temp);
-        console.log("itemData", item);
+        // console.log("temp", temp);
+        // console.log("itemData", item);
       } catch (error) {
         console.error("Error while fetching particular item: ", error);
       }
     };
     getitemdetails();
   }, []);
+
+  useEffect(() => {
+    if (Confirm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // Clean up the effect
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [Confirm]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,10 +83,38 @@ function ParticularItem() {
     }));
   };
 
+  function confirm(event) {
+    event.preventDefault();
+    // return;
+    setErrors({
+      priceError: "",
+    });
+
+    if (
+      // isNaN(Number(data)) ||
+      data.price === "" ||
+      Number(data.price) <= Number(item.basePrice) ||
+      Number(data.price) <= Number(item?.currentPrice)
+    ) {
+      setErrors((prevData) => ({
+        ...prevData,
+        priceError: "invalid",
+      }));
+      return;
+    }
+    setConfirm(true);
+  }
+
+  function Confirm2() {
+    setConfirm(false);
+    setData({ price: "" });
+    toast.success(`You have made bid successfully.`);
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("bid price is : ", typeof Number(data));
-    console.log("current price is : ", typeof Number(item.basePrice));
+    // console.log("bid price is : ", typeof Number(data));
+    // console.log("current price is : ", typeof Number(item.basePrice));
     setErrors({
       priceError: "",
     });
@@ -105,11 +152,15 @@ function ParticularItem() {
       _id_item: item._id,
       currentPrice: Number(data.price),
     };
-    console.log("Inside Frontend:", new_bid);
+    // console.log("Inside Frontend:", new_bid);
     socket.emit("send_message", new_bid);
     setData(() => ({
       price: "",
     }));
+
+    // setConfirm(false);
+    // setData(""),
+    Confirm2();
   };
 
   useEffect(() => {
@@ -130,129 +181,196 @@ function ParticularItem() {
   };
 
   return (
-    <div className="page-mid-section2">
-      <h1 style={{ textAlign: "center", paddingTop: "20px" }}>
-        ITEM : {capitalizeFirstLetter(item?.name)}
-      </h1>
-      <MDBContainer fluid>
-        <MDBRow className="justify-content-center mb-0">
-          <MDBCol md="12" xl="9">
-            <MDBCard className="shadow-0 border rounded-3 mt-4 mb-3">
-              <MDBCardBody>
-                <MDBRow>
-                  <MDBCol
-                    md="12"
-                    lg="3"
-                    className="mb-4 mb-lg-0 d-flex flex-row align-items-center"
-                  >
-                    <MDBRipple
-                      rippleColor="light"
-                      rippleTag="div"
-                      className="bg-image rounded hover-zoom hover-overlay"
+    <>
+      <div
+        className="particular-wrapper"
+        style={{
+          // backgroundColor: "gray",
+          marginBottom: "12px",
+          backdropFilter: "blur(14px)",
+        }}
+      >
+        <ToastContainer />
+        <div className="page-mid-section2">
+          <h1
+            style={{
+              textAlign: "center",
+              paddingTop: "40px",
+              paddingBottom: "20px",
+            }}
+          >
+            <span
+              style={{
+                borderLeft: "4px solid white",
+                borderRight: "4px solid white",
+                padding: "15px 40px",
+                borderRadius: "50%",
+              }}
+            >
+              {" "}
+              Item : {capitalizeFirstLetter(item?.name)}
+            </span>
+          </h1>
+          <MDBContainer fluid>
+            <MDBRow className="justify-content-center mb-0">
+              <MDBCol md="12" xl="9">
+                <MDBCard
+                  className="rounded-3 mt-4 mb-3"
+                  style={{
+                    backdropFilter: "blur(4px)",
+                    backgroundColor: "rgba(255,255,255,0.6)",
+                    // -webkit-backdrop-filter: blur(4px),
+                    border: "4px solid rgb(70, 135, 70)",
+                  }}
+                >
+                  <MDBCardBody>
+                    <MDBRow
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                      }}
                     >
-                      <MDBCardImage
-                        src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
-                        fluid
-                        className="w-100"
-                      />
-                      <a href="#!">
-                        <div
-                          className="mask"
-                          style={{
-                            backgroundColor: "rgba(251, 251, 251, 0.15)",
-                          }}
-                        ></div>
-                      </a>
-                    </MDBRipple>
-                  </MDBCol>
-                  <MDBCol md="6" lg="5">
-                    <h5>{capitalizeFirstLetter(item?.name)}</h5>
-                    <div className="d-flex flex-row justify-content-between">
-                      {/* <div className="text-danger mb-1 me-2">
+                      <MDBCol
+                        md="12"
+                        lg="3"
+                        className="saved-pic-length"
+                        style={{
+                          backgroundImage:
+                            item.cropImage !== ""
+                              ? `url(${item.cropImage})`
+                              : "none",
+                          backgroundColor:
+                            item.cropImage === ""
+                              ? "rgba(127,127,127,0.7)"
+                              : "transparent",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "5px",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "cover",
+                          // minHeight: "350px",
+                        }}
+                        // className="mb-4 mb-lg-0 d-flex flex-row align-items-center"
+                      >
+                        {item.cropImage == "" ? (
+                          <div
+                            style={{
+                              padding: "auto",
+                              color: "white",
+                              height: "fit-content",
+                            }}
+                          >
+                            Image is not available
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </MDBCol>
+                      <MDBCol md="6" lg="5">
+                        <h3>{capitalizeFirstLetter(item?.name)}</h3>
+                        <div className="d-flex flex-row justify-content-between">
+                          {/* <div className="text-danger mb-1 me-2">
                         <MDBIcon fas icon="star" />
                         <MDBIcon fas icon="star" />
                         <MDBIcon fas icon="star" />
                         <MDBIcon fas icon="star" />
                       </div> */}
-                      <span>
-                        Category : {capitalizeFirstLetter(item.category)}
-                      </span>
-                    </div>
-                    <div className="d-flex mb-2 flex-row justify-content-between">
-                      <span>Quantity : {item.quantity}</span>
-                    </div>
+                          <span>
+                            Category : {capitalizeFirstLetter(item.category)}
+                          </span>
+                        </div>
+                        <div className="d-flex mb-2 flex-row justify-content-between">
+                          <span>Quantity : {item.quantity}</span>
+                        </div>
 
-                    <p className=" mb-4 mb-md-0">
-                      There are many variations of passages of Lorem Ipsum
-                      available, but the majority have suffered alteration in
-                      some form, by injected humour, or randomised words which
-                      don't look even slightly believable.
-                    </p>
-                    <div>
-                      <h4 className="mb-2 mt-2 me-1">
-                        Available to bid till : {formatDate(item?.expire)}
-                      </h4>
-                    </div>
+                        <p className=" mb-4 mb-md-0">
+                          There are many variations of passages of Lorem Ipsum
+                          available, but the majority have suffered alteration
+                          in some form, by injected humour, or randomised words
+                          which don't look even slightly believable.
+                        </p>
+                        <div style={{ marginTop: "15px" }}>
+                          <span className="mb-2 mt-0 text-muted small">
+                            Last Date to bid : {formatDate(item?.expire)}
+                          </span>
+                        </div>
 
-                    <div className="mb-2 text-muted small">
-                      <span>Date Listed : {formatDate(item.updatedAt)}</span>
-                    </div>
-                  </MDBCol>
+                        <div className="mb-4 text-muted small">
+                          <span>
+                            Date Listed : {formatDate(item.updatedAt)}
+                          </span>
+                        </div>
+                      </MDBCol>
 
-                  <MDBCol
-                    md="6"
-                    lg="3"
-                    className="border-sm-start-none border-start"
-                  >
-                    <div>
-                      <h4
-
-                      // className="mb-1 me-1"
+                      <MDBCol
+                        md="6"
+                        lg="3"
+                        className="border-sm-start-none border-start"
                       >
-                        {" "}
-                        Base Price : &#8377;{item.basePrice}
-                      </h4>
-                      <h4
+                        <div>
+                          <h5
 
-                      // className="mb-1 me-1"
-                      >
-                        {" "}
-                        Current Price : &#8377;{item?.currentPrice || "0.00"}
-                      </h4>
-                      {/* <span className="text-danger">
+                          // className="mb-1 me-1"
+                          >
+                            {" "}
+                            Base Price : &#8377;{item.basePrice}
+                          </h5>
+                          <h5
+                          // style={{ fontWeight: "500" }}
+                          // className="mb-1 me-1"
+                          >
+                            {" "}
+                            Current Price : &#8377;
+                            {item?.currentPrice || "0.00"}
+                          </h5>
+                          {/* <span className="text-danger">
                         <s>$20.99</s>
                       </span> */}
-                    </div>
-                    <h6 className="text-success mt-4">Make Bid : </h6>
-                    <div className="d-flex flex-column mt-2">
-                      <Form onSubmit={handleSubmit}>
-                        <InputGroup className="mb-3">
-                          <InputGroup.Text>&#8377;</InputGroup.Text>
-                          <Form.Control
-                            name="price"
-                            onChange={handleChange}
-                            type="text"
-                            pattern="[0-9]*"
-                            isInvalid={errors.priceError === "invalid"}
-                            placeholder="Enter Your Amount"
-                            aria-label="Amount you wnat to make bid of "
-                          />
-
-                          <Form.Control.Feedback type="invalid">
-                            Please enter a fair price.
-                          </Form.Control.Feedback>
-                          {/* <InputGroup.Text>.00</InputGroup.Text> */}
-                        </InputGroup>
-                        <Button
-                          className="mt-3"
-                          color="primary"
-                          size="sm"
-                          type="submit"
+                        </div>
+                        <h6
+                          className="text-success mt-4"
+                          style={{ fontWeight: "600" }}
                         >
-                          Make Bid
-                        </Button>
-                      </Form>
-                      {/* <MDBBtn
+                          Enter Bid Price :{" "}
+                        </h6>
+                        <div className="d-flex flex-column mt-2">
+                          <Form onSubmit={confirm}>
+                            <InputGroup className="mb-3">
+                              <InputGroup.Text
+                                style={{ backgroundColor: "white" }}
+                              >
+                                &#8377;
+                              </InputGroup.Text>
+                              <Form.Control
+                                name="price"
+                                onChange={handleChange}
+                                type="text"
+                                pattern="[0-9]*"
+                                value={data.price}
+                                isInvalid={errors.priceError === "invalid"}
+                                placeholder="Enter Your Amount"
+                                aria-label="Amount you wnat to make bid of "
+                              />
+
+                              <Form.Control.Feedback type="invalid">
+                                Please enter a fair price.
+                              </Form.Control.Feedback>
+                              {/* <InputGroup.Text>.00</InputGroup.Text> */}
+                            </InputGroup>
+                            <Button
+                              style={{
+                                marginTop: "12px",
+                                padding: "10px 30px",
+                                backgroundColor: "rgb(70, 135, 70)",
+                                fontWeight: "600",
+                              }}
+                              type="submit"
+                            >
+                              Make Bid
+                            </Button>
+                          </Form>
+                          {/* <MDBBtn
                         outline
                         color="primary"
                         size="sm"
@@ -260,15 +378,58 @@ function ParticularItem() {
                       >
                         Add to wish list
                       </MDBBtn> */}
-                    </div>
-                  </MDBCol>
-                </MDBRow>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-    </div>
+                        </div>
+                      </MDBCol>
+                    </MDBRow>
+                  </MDBCardBody>
+                </MDBCard>
+              </MDBCol>
+            </MDBRow>
+          </MDBContainer>
+        </div>
+      </div>
+      <div
+        style={{
+          position: "fixed",
+          zIndex: "20",
+          top: "0",
+          bottom: "0",
+          backgroundColor: "rgba(0,0,0,0.7)",
+          width: "100%",
+          height: "100vh",
+
+          display: Confirm ? "flex" : "none",
+          alignItems: "center",
+          justifyContent: "center",
+          // marginBottom: "12px",
+        }}
+      >
+        <Toast onClose={() => setConfirm(false)}>
+          <Toast.Header closeButton>
+            {/* <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" /> */}
+            <strong className="me-auto"></strong>
+            <small></small>
+            {/* <CloseButton onClick={() => setConfirm(false)} /> */}
+          </Toast.Header>
+          <Toast.Body style={{ textAlign: "center" }}>
+            Are you sure you want to make a bid ?
+          </Toast.Body>
+          <div style={{ display: "flex", marginBottom: "20px" }}>
+            <Button
+              onClick={handleSubmit}
+              style={{
+                textAlign: "center",
+                margin: "auto",
+                backgroundColor: "rgb(70, 135, 70)",
+                fontWeight: "bold",
+              }}
+            >
+              Yes
+            </Button>
+          </div>
+        </Toast>
+      </div>
+    </>
   );
 }
 

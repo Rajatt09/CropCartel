@@ -1,9 +1,48 @@
 body {
-    background-color: #eee;
+  background-color: #eee;
+}
+
+.particular-wrapper {
+  background-image: url("./image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.saved-wrapper {
+  background-image: url("../Footer/image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bid-width-cl {
+  width: 70%;
+}
+
+@media (max-width: 768px) {
+  .border-sm-start-none {
+    border-left: none !important;
   }
-  
-  @media (max-width: 767.98px) {
-    .border-sm-start-none {
-      border-left: none !important;
-    }
+}
+
+@media screen and (max-width: 993px) {
+  .saved-pic-length {
+    height: 300px;
+    margin-bottom: 20px;
+    /* width: 50%; */
   }
+}
+
+@media screen and (max-width: 768px) {
+  .history-pic-length {
+    height: 300px;
+  }
+  .bid-width-cl {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 551px) {
+  .bid-width-cl {
+    width: 97%;
+  }
+}

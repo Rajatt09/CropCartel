@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 const AddItem = () => {
   return (
-    <div>
+    <div style={{ marginBottom: "12px" }}>
       <CommonItem name="Add" />
     </div>
   );

@@ -215,7 +215,7 @@ const getDetails = async function (req, res) {
       "-password -refreshToken -createdAt  -updatedAt -__v"
     );
 
-    console.log("get details is activated");
+    // console.log("get details is activated");
 
     return res.status(200).json(new ApiResponse(200, loggedInUser));
   } catch (e) {

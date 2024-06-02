@@ -1,7 +1,7 @@
 .login-form {
   width: 45%;
   margin: auto;
-  min-height: 89.7vh;
+  min-height: 93.6vh;
   display: flex;
   flex-direction: column;
 
@@ -11,10 +11,30 @@
   display: none;
 }
 
+.login-back {
+  background-image: url("../LandingPage/landing.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.login-back-inner {
+  background-color: rgba(159, 183, 124, 0.4);
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  /* background-color: rgba(255, 255, 255, 0.5); */
+}
+
+.profile-sec-update-detail {
+  background-image: url("./image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @media screen and (max-aspect-ratio: 4/3) {
   .login-form {
     width: 85%;
-    min-height: 92vh;
+    min-height: 96.55vh;
   }
   .login-row {
     display: flex;

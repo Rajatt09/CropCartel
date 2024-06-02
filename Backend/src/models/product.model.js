@@ -10,9 +10,9 @@ const productSchema = new mongoose.Schema(
       type: String,
       //   required: true,
     },
-    description:{
-      type:String,
-      required:true
+    description: {
+      type: String,
+      required: true,
     },
     quantity: {
       type: Number,
@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema(
     },
     expire: {
       type: Date,
-      required:true
+      required: true,
     },
     basePrice: {
       type: Number,
@@ -35,6 +35,14 @@ const productSchema = new mongoose.Schema(
     currentPrice: {
       type: Number,
       //required:true
+    },
+    sellerCount: {
+      type: Number,
+      default: 1,
+    },
+    buyerCount: {
+      type: Number,
+      default: 1,
     },
     seller: {
       type: Schema.Types.ObjectId,

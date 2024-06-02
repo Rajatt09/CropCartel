@@ -5,7 +5,7 @@ import React from "react";
 import AvatarSection from "../Login/AvatarSection";
 
 function MyVerticallyCenteredModal(props) {
-  console.log(props);
+  // console.log(props);
   return (
     <Modal
       {...props}
@@ -13,7 +13,10 @@ function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header
+        closeButton
+        style={{ backgroundColor: "rgba(70, 135, 70, 0.85)" }}
+      >
         {/* <Modal.Title id="contained-modal-title-vcenter">
           Modal heading
         </Modal.Title> */}
@@ -24,19 +27,25 @@ function MyVerticallyCenteredModal(props) {
         <AvatarSection />
       ) : null}
 
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
+      <Modal.Footer style={{ backgroundColor: "rgba(70, 135, 70,0.85)" }}>
+        <Button style={{ backgroundColor: "#b23b3b" }} onClick={props.onHide}>
+          Close
+        </Button>
       </Modal.Footer>
     </Modal>
   );
 }
 
-function ProfileModal({ buttonLabel, modalCall }) {
+function ProfileModal({ buttonLabel, modalCall, style }) {
   const [modalShow, setModalShow] = React.useState(false);
 
   return (
     <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
+      <Button
+        style={style}
+        variant="primary"
+        onClick={() => setModalShow(true)}
+      >
         {buttonLabel}
       </Button>
 

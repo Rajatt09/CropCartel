@@ -44,8 +44,8 @@ export default function ProfilePage() {
 
         setUserProfile(temp);
 
-        console.log("temp", temp);
-        console.log("userData", userProfile);
+        // console.log("temp", temp);
+        // console.log("userData", userProfile);
       } catch (error) {
         console.error("Error while fetching User: ", error);
       }
@@ -73,8 +73,11 @@ export default function ProfilePage() {
     }
   }
   return (
-    <section style={{ backgroundColor: "#eee", paddingTop: "42px" }}>
-      <MDBContainer style={{ paddingTop: "42px" }}>
+    <section
+      className="profile-section"
+      style={{ paddingTop: "0px", marginBottom: "12px" }}
+    >
+      <MDBContainer style={{ paddingTop: "30px" }}>
         <MDBRow>
           <MDBCol>
             <MDBBreadcrumb
@@ -82,10 +85,12 @@ export default function ProfilePage() {
                 display: "flex",
                 justifyContent: "center",
                 textAlign: "center",
-                backgroundColor: "yellow",
+                backgroundColor: "rgba(70, 135, 70, 0.8)",
+                backdropFilter: "blur(4px)",
                 fontSize: "1.5rem",
+                color: "white",
               }}
-              className="bg-light rounded-3 p-3 mb-4"
+              className=" rounded-3 p-3 mb-4"
             >
               {/* <MDBBreadcrumbItem>
                 <a href="#">Home</a>
@@ -100,7 +105,14 @@ export default function ProfilePage() {
 
         <MDBRow>
           <MDBCol lg="4">
-            <MDBCard className="mb-4">
+            <MDBCard
+              className="mb-4"
+              style={{
+                backgroundColor: "rgba(70, 135, 70, 0.8)",
+                backdropFilter: "blur(4px)",
+                color: "white",
+              }}
+            >
               <MDBCardBody className="text-center">
                 {/* <MDBCardImage
                   src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
@@ -124,10 +136,9 @@ export default function ProfilePage() {
                     alt="avatar"
                     style={{
                       width: "150px",
-                      height: "auto",
-                      maxWidth: "150px",
-                      maxHeight: "150px",
+                      height: "150px",
                       borderRadius: "50%",
+                      border: "3px solid #cefad0",
                     }}
                     fluid
                   />
@@ -136,52 +147,58 @@ export default function ProfilePage() {
                     <IoPersonSharp
                       style={{
                         fontSize: "9em",
+                        padding: "4px",
                         //   backgroundColor: "gray",
-                        //   borderRadius: "50%",
+                        borderRadius: "50%",
+                        border: "2px solid",
                       }}
                     />
                   </div>
                 )}
-                <p className="text-muted mb-1">
+
+                <p className=" mb-1">
                   {capitalizeFirstLetter(userProfile.name)}
                 </p>
-                <p className="text-muted mb-4">{userProfile.email}</p>
-                <div className="d-flex justify-content-center mb-2">
+                <p className=" mb-4">{userProfile.email}</p>
+                <div className=" mb-2">
                   {/* <MDBBtn>Edit Profile Picture</MDBBtn> */}
                   <ProfileModal
                     setUserProfile={setUserProfile}
                     buttonLabel="Update Profile Picture"
                     modalCall="avatar"
+                    style={{ backgroundColor: "#77D077" }}
                   />
                   {/* <MDBBtn outline className="ms-1">
                     Edit
                   </MDBBtn> */}
+                  <br /> <br />
+                  <div className=" mb-2">
+                    {/* <MDBBtn>Update Profile Details</MDBBtn> */}
+                    <ProfileModal
+                      setUserProfile={setUserProfile}
+                      buttonLabel="Update Profile Details"
+                      modalCall="Login"
+                      style={{ backgroundColor: "#77D077" }}
+                    />{" "}
+                    {/* <MDBBtn outline className="ms-1">
+                    Edit
+                  </MDBBtn> */}
+                  </div>
+                  <div className="profile-show1" style={{ marginTop: "18px" }}>
+                    <MDBBtn
+                      className="profile-show1"
+                      style={{ backgroundColor: "#b23b3b" }}
+                      onClick={logout}
+                    >
+                      Logout
+                    </MDBBtn>
+                    {/* <MDBBtn outline className="ms-1">
+                    Edit
+                  </MDBBtn> */}
+                  </div>
                 </div>
               </MDBCardBody>
             </MDBCard>
-            <div className="d-flex justify-content-center mb-2">
-              {/* <MDBBtn>Update Profile Details</MDBBtn> */}
-              <ProfileModal
-                setUserProfile={setUserProfile}
-                buttonLabel="Update Profile Details"
-                modalCall="Login"
-              />
-              {/* <MDBBtn outline className="ms-1">
-                    Edit
-                  </MDBBtn> */}
-            </div>
-
-            <div
-              className="d-flex justify-content-center mb-2 profile-show1"
-              style={{ marginTop: "18px" }}
-            >
-              <MDBBtn className="profile-show1" onClick={logout}>
-                Logout
-              </MDBBtn>
-              {/* <MDBBtn outline className="ms-1">
-                    Edit
-                  </MDBBtn> */}
-            </div>
 
             {/* <MDBCard className="mb-4 mb-lg-0">
               <MDBCardBody className="p-0">
@@ -227,16 +244,26 @@ export default function ProfilePage() {
             </MDBCard> */}
           </MDBCol>
           <MDBCol lg="8">
-            <MDBCard className="mb-5">
+            <MDBCard
+              className="mb-5"
+              style={{
+                backgroundColor: "rgba(70, 135, 70, 0.8)",
+                backdropFilter: "blur(4px)",
+                color: "white",
+              }}
+            >
               <MDBCardBody
-                style={{ marginTop: "3.6px", marginBottom: "3.6px" }}
+                style={{
+                  marginTop: "5px",
+                  marginBottom: "6.5px",
+                }}
               >
-                <MDBRow>
+                <MDBRow style={{ color: "white" }}>
                   <MDBCol sm="3">
                     <MDBCardText>Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
+                    <MDBCardText>
                       {capitalizeFirstLetter(userProfile.name)}
                     </MDBCardText>
                   </MDBCol>
@@ -247,9 +274,7 @@ export default function ProfilePage() {
                     <MDBCardText>Email</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      {userProfile.email}
-                    </MDBCardText>
+                    <MDBCardText>{userProfile.email}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -258,9 +283,7 @@ export default function ProfilePage() {
                     <MDBCardText>Phone</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      {`+91 ${userProfile.phnumber}`}
-                    </MDBCardText>
+                    <MDBCardText>{`+91 ${userProfile.phnumber}`}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -269,7 +292,7 @@ export default function ProfilePage() {
                     <MDBCardText>UPI ID</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
+                    <MDBCardText>
                       {userProfile.upiId || "Not Provided"}
                     </MDBCardText>
                   </MDBCol>
@@ -280,7 +303,7 @@ export default function ProfilePage() {
                     <MDBCardText>Aaadhar</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
+                    <MDBCardText>
                       {userProfile.aadhar || "Not Provided"}
                     </MDBCardText>
                   </MDBCol>
@@ -291,10 +314,12 @@ export default function ProfilePage() {
                     <MDBCardText>Address</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
+                    <MDBCardText>
                       {userProfile.city != undefined &&
                       userProfile.state != undefined
-                        ? `${userProfile.city}, ${userProfile.state}`
+                        ? `${capitalizeFirstLetter(userProfile.city)}, ${
+                            userProfile.state
+                          }`
                         : "Not Provided"}
                     </MDBCardText>
                   </MDBCol>
@@ -305,7 +330,7 @@ export default function ProfilePage() {
                     <MDBCardText>Zip Code</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
+                    <MDBCardText>
                       {userProfile.zipCode || "Not Provided"}
                     </MDBCardText>
                   </MDBCol>
@@ -443,7 +468,11 @@ export default function ProfilePage() {
             className="d-flex justify-content-center pb-4 mb-2 profile-show2"
             style={{ marginTop: "-8px" }}
           >
-            <MDBBtn className="profile-show2" onClick={logout}>
+            <MDBBtn
+              style={{ backgroundColor: "#b23b3b" }}
+              className="profile-show2"
+              onClick={logout}
+            >
               Logout
             </MDBBtn>
             {/* <MDBBtn outline className="ms-1">

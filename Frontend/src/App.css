@@ -1,5 +1,6 @@
-.page-mid-section {
-  min-height: 89.7vh;
+.page-mid-section,
+.page-mid-sectionn {
+  min-height: 93.8vh;
   margin: auto;
   width: 45%;
 }
@@ -31,9 +32,13 @@
   }
   .page-mid-section {
     width: 85%;
-    min-height: 92vh;
+    min-height: 96.52vh;
   }
   .page-mid-section2 {
     min-height: 92vh;
+  }
+  .page-mid-sectionn {
+    width: 95%;
+    min-height: 96.52vh;
   }
 }

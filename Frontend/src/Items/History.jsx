@@ -15,10 +15,41 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ApiCall from "../../utils/ApiCall";
 import { useParams } from "react-router-dom";
+import Button from "react-bootstrap/esm/Button";
+import Toast from "react-bootstrap/Toast";
+import CloseButton from "react-bootstrap/esm/CloseButton";
+import "./ParticularItem.css";
 
 export default function History({ type, status }) {
   const { id } = useParams;
   const [items, setItems] = useState([]);
+
+  const [Confirm, setConfirm] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [typebox, setType] = useState(2);
+
+  const handleDelete = async () => {
+    // console.log("item to be deleted :", Confirm);
+    // console.log("item to be sent : ", {
+    //   type: "seller",
+    //   id: Confirm._id,
+    // });
+    try {
+      const response = await ApiCall("/users/getDelete", "POST", {
+        type: "seller",
+        id: Confirm._id,
+      });
+      if (response) {
+        // console.log("saved item deleted successfully");
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error("Error while deleting items: ", error);
+    }
+    setConfirm(null);
+    setSelectedItem(null);
+    setType(2);
+  };
 
   useEffect(() => {
     const getitemdetails = async () => {
@@ -31,14 +62,35 @@ export default function History({ type, status }) {
 
         setItems(temp);
 
-        console.log("temp", temp);
-        console.log("history", items);
+        // console.log("temp", temp);
+        // console.log("history", items);
       } catch (error) {
         console.error("Error while fetching history: ", error);
       }
     };
     getitemdetails();
   }, []);
+
+  useEffect(() => {
+    if (selectedItem) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    // Clean up the effect
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedItem]);
+
+  function confirm(item, a) {
+    if (a == 1) {
+      setConfirm(item);
+    }
+    setType(a);
+    setSelectedItem(item);
+  }
 
   const description =
     "This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.";
@@ -60,115 +112,346 @@ export default function History({ type, status }) {
     return str;
   };
   return (
-    <div className="page-mid-section2">
-      <h2 style={{ textAlign: "center", margin: "8px 0px 14px 0px" }}>
-        {type} History
-      </h2>
+    <div
+      className="history-wrap"
+      style={{ backgroundColor: "gray", marginBottom: "12px" }}
+    >
       <div
-        style={{
-          width: "90%",
-          // backgroundColor: "black",
-          margin: "20px auto 20px",
-          display: "flex",
-          height: "fit-content",
-          flexWrap: "wrap",
-          justifyContent: "space-evenly",
-        }}
+        className="page-mid-section2"
+        style={{ marginTop: "-8px", paddingBottom: "0.1px" }}
       >
-        {items.map((item, index) => (
-          <MDBCard
-            key={index}
-            className="itemlisting-img"
+        <h2
+          style={{
+            textAlign: "center",
+            margin: "8px 0px 14px 0px",
+            paddingTop: "40px",
+            paddingBottom: "20px",
+          }}
+        >
+          <span
             style={{
-              maxHeight: "540px",
-              borderRadius: "10px",
-              marginBottom: "40px",
+              borderLeft: "4px solid white",
+              borderRight: "4px solid white",
+              padding: "15px 45px",
+              borderRadius: "50%",
             }}
           >
-            <MDBRow className="g-0">
-              <MDBCol
-                md="4"
+            {type} History
+          </span>
+        </h2>
+        <div
+          style={{
+            width: "90%",
+            // backgroundColor: "black",
+            margin: "20px auto 20px",
+            display: "flex",
+            height: "fit-content",
+            flexWrap: "wrap",
+            justifyContent: "space-evenly",
+          }}
+        >
+          {items.map((item, index) => (
+            <div key={index} style={{ minWidth: "70%" }}>
+              <MDBCard
+                className="itemlisting-img"
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  backgroundColor: "rgba(255,255,255,0.6)",
+                  backdropFilter: "blur(4px)",
+                  // -webkit-backdrop-filter: blur(4px),
+                  border: "4px solid rgb(70, 135, 70)",
+                  boxShadow: "4px 4px 40px 6px rgba(70, 135, 70,0.4)",
+                  maxHeight: "fit-content",
+                  borderRadius: "10px",
+                  marginBottom: "40px",
                 }}
               >
-                <MDBCardImage
-                  style={{
-                    borderRadius: "10px",
-                    width: "80%",
-                    maxHeight: "220px",
-                  }}
-                  src="https://mdbootstrap.com/wp-content/uploads/2020/06/vertical.webp"
-                  alt="..."
-                  fluid
-                />
-                {/* <MDBCardImage
-                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/5.webp"
-                position="top"
-                alt="Gaming Laptop"
-              /> */}
-              </MDBCol>
-              <MDBCol md="8">
-                <MDBCardBody>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <MDBCardTitle>
-                      {capitalizeFirstLetter(item?.name)}
-                    </MDBCardTitle>
-                    <MDBCardTitle>
-                      {capitalizeFirstLetter(item?.category)}
-                    </MDBCardTitle>
-                  </div>
+                <MDBRow className="g-0">
+                  <MDBCol
+                    md="4"
+                    className="history-pic-length "
+                    style={{
+                      backgroundImage:
+                        item.cropImage !== ""
+                          ? `url(${item.cropImage})`
+                          : "none",
+                      backgroundColor:
+                        !item.cropImage || item.cropImage == ""
+                          ? "rgba(127,127,127,0.7)"
+                          : "transparent",
+                      display: "flex",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "cover",
+                      justifyContent: "center",
+                      alignItems: "center",
 
-                  <MDBCardText>{truncateText(description, 200000)}</MDBCardText>
-                  {/* <p className="text-truncate mb-4 mb-md-0">
+                      // minHeight: "200px",
+                      // margin: "20px 20px",
+                    }}
+                  >
+                    {!item.cropImage || item.cropImage == "" ? (
+                      <div
+                        style={{
+                          padding: "auto",
+                          color: "white",
+                          height: "fit-content",
+                        }}
+                      >
+                        Image is not available
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    {/* <img
+                      style={{
+                        borderRadius: "10px",
+                        width: "80%",
+                        height: "220px",
+                        objectFit: "cover",
+                      }}
+                      className="dashboard-item-pic"
+                      src="https://mdbootstrap.com/wp-content/uploads/2020/06/vertical.webp"
+                      alt="..."
+                    /> */}
+                  </MDBCol>
+                  <MDBCol md="8">
+                    <MDBCardBody>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <MDBCardTitle>
+                          {capitalizeFirstLetter(item?.name)}
+                        </MDBCardTitle>
+                        <MDBCardTitle>
+                          {capitalizeFirstLetter(item?.category)}
+                        </MDBCardTitle>
+                      </div>
+
+                      <MDBCardText>
+                        {truncateText(item?.description, 200000)}
+                      </MDBCardText>
+                      {/* <p className="text-truncate mb-4 mb-md-0">
                       There are many variations of passages of Lorem Ipsum
                       available, but the majority have suffered alteration in
                       some form, by injected humour, or randomised words which
                       don't look even slightly believable.
                     </p> */}
-                  <MDBCardText>
-                    <span className="text-muted">
-                      Base Price : &#x20B9; {item.basePrice}
-                      &nbsp; &nbsp; {type} Price :{" "}
-                      {/* {item?.currentPrice
+                      <MDBCardText>
+                        <span className="text-muted">
+                          Base Price : &#x20B9; {item.basePrice}
+                          &nbsp; &nbsp; {type} Price :{" "}
+                          {/* {item?.currentPrice
                         ? `&#x20B9; ${item.currentPrice}`
                         : "00.00"} */}
-                      &#x20B9; {item?.currentPrice || "00.00"}
-                    </span>
-                  </MDBCardText>
-                  <MDBCardText>
-                    <small className="text-muted">
-                      Status : &nbsp; &nbsp;
-                      {item?.currentPrice ? (
-                        <MDBBadge color="success" pill>
-                          Sold
-                        </MDBBadge>
-                      ) : (
-                        <MDBBadge color="danger" pill>
-                          Item not purchased by anyone
-                        </MDBBadge>
-                      )}
-                    </small>
-                  </MDBCardText>
-                  <MDBCardText
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                          &#x20B9; {item?.currentPrice || "00.00"}
+                        </span>
+                      </MDBCardText>
+                      <MDBCardText>
+                        <small className="text-muted">
+                          Status : &nbsp; &nbsp;
+                          {item?.currentPrice ? (
+                            <MDBBadge color="success" pill>
+                              Sold
+                            </MDBBadge>
+                          ) : (
+                            <MDBBadge color="danger" pill>
+                              Item not purchased by anyone
+                            </MDBBadge>
+                          )}
+                        </small>
+                      </MDBCardText>
+                      <MDBCardText
+                        className="history-time"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <small className="text-muted">
+                          Created on :{formatDate(item.updatedAt)}
+                        </small>
+                        <small className="text-muted">
+                          Last Date for Bid :{formatDate(item.expire)}
+                        </small>
+                      </MDBCardText>
+                      <MDBCardText
+                        className="history-time"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {item?.currentPrice ? (
+                          <Button
+                            style={{
+                              backgroundColor: "rgb(70, 135, 70)",
+                              marginBottom: "10px",
+                              fontWeight: "600",
+                              fontSize: "0.8rem",
+                            }}
+                            onClick={() => confirm(item, 0)}
+                          >
+                            View Buyer's Detail
+                          </Button>
+                        ) : (
+                          <Button
+                            style={{
+                              backgroundColor: "transparent",
+                              marginBottom: "10px",
+                              boxShadow: "none",
+                              fontWeight: "600",
+                              fontSize: "0.8rem",
+                              color: "red",
+                            }}
+                          >
+                            Buyer's Detail is not available
+                          </Button>
+                        )}
+                        <Button
+                          variant="danger"
+                          style={{
+                            marginBottom: "10px",
+                            fontWeight: "600",
+                            fontSize: "0.8rem",
+                          }}
+                          onClick={() => confirm(item, 1)}
+                        >
+                          Delete this item
+                        </Button>
+                      </MDBCardText>
+                    </MDBCardBody>
+                  </MDBCol>
+                </MDBRow>
+              </MDBCard>
+              <div
+                style={{
+                  position: "fixed",
+                  zIndex: "200",
+                  top: "0",
+                  left: "0",
+                  backgroundColor: "rgba(0,0,0,0.3)",
+                  width: "100%",
+                  height: "100vh",
+                  // marginTop: "-62px",
+                  display: selectedItem ? "flex" : "none",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  // marginBottom: "12px",
+                }}
+              >
+                {typebox === 0 ? (
+                  <Toast
+                    style={{ marginLeft: "20px", marginRight: "20px" }}
+                    onClose={() => {
+                      // setConfirm(false);
+                      setSelectedItem(null);
+                      setType(2);
+                    }}
                   >
-                    <small className="text-muted">
-                      Created on :{formatDate(item.updatedAt)}
-                    </small>
-                    <small className="text-muted">
-                      Last Date for Bid :{formatDate(item.expire)}
-                    </small>
-                  </MDBCardText>
-                </MDBCardBody>
-              </MDBCol>
-            </MDBRow>
-          </MDBCard>
-        ))}
+                    <Toast.Header
+                      style={{
+                        backgroundColor: "rgba(70, 135, 70,0.8)",
+                        color: "white",
+                      }}
+                      closeButton
+                    >
+                      {/* <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" /> */}
+                      <strong className="me-auto">
+                        Item name : {capitalizeFirstLetter(selectedItem?.name)}
+                      </strong>
+                      <small></small>
+                      {/* <CloseButton onClick={() => setConfirm(false)} /> */}
+                    </Toast.Header>
+                    <Toast.Body style={{ textAlign: "center" }}>
+                      <div>
+                        <p>
+                          <strong>Buyer's Detail</strong>
+                        </p>
+                        <div style={{ textAlign: "left" }}>
+                          Name :{" "}
+                          {capitalizeFirstLetter(selectedItem?.buyerName) ||
+                            "Not Available"}{" "}
+                          <br />
+                          Email : {selectedItem?.buyerEmail ||
+                            "Not  Available"}{" "}
+                          <br />
+                          Phone number :{" "}
+                          {selectedItem?.buyerPhone || "Not Available"} <br />
+                          Address : <br /> City :{" "}
+                          {capitalizeFirstLetter(selectedItem?.buyerCity) ||
+                            "Not Available"}{" "}
+                          <br />
+                          State :{" "}
+                          {capitalizeFirstLetter(selectedItem?.buyerState) ||
+                            "Not Available"}
+                        </div>
+                      </div>
+                      {/* Are you sure you want to make a bid ? */}
+                    </Toast.Body>
+                  </Toast>
+                ) : (
+                  ""
+                )}
+                {typebox === 1 ? (
+                  <Toast
+                    onClose={() => {
+                      // setConfirm(false);
+                      setSelectedItem(null);
+                      setType(2);
+                    }}
+                  >
+                    <Toast.Header closeButton>
+                      {/* <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" /> */}
+                      <strong className="me-auto"></strong>
+                      <small></small>
+                      {/* <CloseButton onClick={() => setConfirm(false)} /> */}
+                    </Toast.Header>
+                    <Toast.Body style={{ textAlign: "center" }}>
+                      Are you sure you want to delete this item ?
+                    </Toast.Body>
+                    <div style={{ display: "flex", marginBottom: "20px" }}>
+                      <Button
+                        onClick={handleDelete}
+                        style={{
+                          textAlign: "center",
+                          margin: "auto",
+                          backgroundColor: "rgb(70, 135, 70)",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Yes
+                      </Button>
+                    </div>
+                  </Toast>
+                ) : (
+                  ""
+                )}
+              </div>
+              ;
+            </div>
+          ))}
+
+          {items.length === 0 ? (
+            <div
+              style={{
+                position: "absolute",
+                top: "70px",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                height: "90vh",
+              }}
+            >
+              <h3>Sold History is empty</h3>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );

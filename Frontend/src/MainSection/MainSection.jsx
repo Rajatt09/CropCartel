@@ -12,13 +12,13 @@ const MainSection = () => {
   const [section, setSection] = useState("");
   const [itemUrl, setItemUrl] = useState("");
   const { id } = useParams();
-  console.log("id: ", id);
+  // console.log("id: ", id);
 
   useEffect(() => {
-    console.log("Inside MainSection useEffect");
+    // console.log("Inside MainSection useEffect");
     var currentURL = window.location.href;
     currentURL = currentURL.split("/");
-    console.log(currentURL);
+    // console.log(currentURL);
     // let urlsection1 = currentURL[currentURL.length - 1];
     // let urlsection2 = currentURL[currentURL.length - 2];
     setSection(currentURL[currentURL.length - 1]);
@@ -34,7 +34,7 @@ const MainSection = () => {
 
   if (section === "additem") return <AddItem />;
   if (itemUrl === "item") return <ParticularItem />;
-  else return <div>To Be Decided</div>;
+  else return <div></div>;
 };
 
 export default MainSection;
