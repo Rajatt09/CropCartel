@@ -59,8 +59,8 @@ import userRouter from "./routes/user.routes.js";
 
 app.use("/api/v1/users", userRouter);
 
-server.listen(process.env.PORT, () => {
-  console.log("WebSocket Listening on:", `${process.env.PORT}`);
-});
+// server.listen(process.env.PORT, () => {
+//   console.log("WebSocket Listening on:", `${process.env.PORT}`);
+// });
 
-export { app };
+export { app, server };
