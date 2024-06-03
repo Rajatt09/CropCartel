@@ -28,6 +28,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
     credentials: true,
   },
+  path: "/socket.io",
 });
 
 io.on("connection", (socket) => {
@@ -58,8 +59,8 @@ import userRouter from "./routes/user.routes.js";
 
 app.use("/api/v1/users", userRouter);
 
-server.listen(process.env.SOCKET_PORT, () => {
-  console.log("WebSocket Listening on:", `${process.env.SOCKET_PORT}`);
+server.listen(process.env.PORT, () => {
+  console.log("WebSocket Listening on:", `${process.env.PORT}`);
 });
 
 export { app };
